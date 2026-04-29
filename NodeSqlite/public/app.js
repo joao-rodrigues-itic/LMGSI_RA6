@@ -2,7 +2,6 @@
 const loadButton = document.getElementById("load-btn");
 const artistOutput = document.getElementById("artist-output");
 
-
 const artistNameInput = document.getElementById("artist-name");
 
 form.addEventListener("submit", async (event) => {
