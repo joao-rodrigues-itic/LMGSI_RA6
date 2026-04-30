@@ -46,20 +46,22 @@ h2 {
 p {
   margin: 0;
   color: var(--muted);
+  margin-bottom: 20px;
 }
 
 form,
 .row {
   display: flex;
   gap: 10px;
+  flex-direction: column;
   flex-wrap: wrap;
-  align-items: end;
+  align-items: center;
 }
 
 form > *,
 .row > * {
   flex: 1;
-  min-width: 160px;
+  min-width: 500px;
 }
 
 label {

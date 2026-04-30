@@ -102,10 +102,12 @@ db.serialize(() => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-
+// Adicionar artistes POST
 app.post("/api/AddArtist",  (req, res) => {
   const name = req.body.data;
-  db.run("INSERT INTO artists (name) VALUES (?)", [name], (error) => {
+  //Afegint la informació de nacionalitat per els artistes
+  const nacionalitat = req.body.nacionalitat || null;
+  db.run("INSERT INTO artists (name, nacionalitat) VALUES (?, ?)", [name, nacionalitat], (error) => {
     if (error) {
       res.status(500).type("text").send(`Error: ${error.message}`);
       return;
@@ -114,6 +116,7 @@ app.post("/api/AddArtist",  (req, res) => {
   });
 });
 
+// Consultar artistes GET
 app.post("/api/artists",  (req, res) => {
   const table = req.body.data;
   db.all(`SELECT * FROM ${table} ORDER BY id`, (err, rows) => {
@@ -123,6 +126,43 @@ app.post("/api/artists",  (req, res) => {
     }
     console.log(rows);
     res.json({ result: rows });
+  });
+});
+
+// Deletar artistes DELETE
+app.delete("/api/DelArtist",  (req, res) => {
+  const name = req.body.data;
+  db.run("DELETE FROM artists WHERE (name) = (?)", [name], (error) => {
+    if (error) {
+      res.status(500).type("text").send(`Error: ${error.message}`);
+      return;
+    }
+    res.status(201).type("text").send(`Artista eliminat: ${name}`);
+  });
+});
+
+// Actualitzar artistes UPDATE
+app.put("/api/UpdateArtist",  (req, res) => {
+  const name = req.body.oldName;
+  const newName = req.body.newName;
+  const newNacionality = req.body.newNacionalitat || null;
+
+  if (!name || !newName) {
+    res.status(400).type("text").send("Cal el nom actual i el nou nom de l'artista.");
+    return;
+  }
+
+  db.run("UPDATE artists SET name = ?, nacionalitat = ? WHERE name = ?", [newName, newNacionality, name], function(error) {
+    if (error) {
+      res.status(500).type("text").send(`Error: ${error.message}`);
+      return;
+    }
+    //Si no hi ha línies afectades, s'envia un missatge
+    if (this.changes === 0) {
+      res.status(404).type("text").send(`No s'ha trobat cap artista amb el nom: ${name}`);
+      return;
+    }
+    res.status(200).type("text").send(`Artista actualitzat: ${name} → ${newName}`);
   });
 });
 

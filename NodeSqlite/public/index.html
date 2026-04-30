@@ -22,6 +22,10 @@
           <input id="artist-name" name="name" required />
         </div>
         <div>
+          <label for="artist-name">Nacionalitat de l'artista</label>
+          <input id="artist-nacionalitat" name="name" />
+        </div>
+        <div>
           <button type="submit">Desar</button>
         </div>
       </form>
@@ -29,11 +33,49 @@
 
     <section class="card">
       <h2>2) Consultar artistes</h2>
+      <p id="artist-output">Prem "Carregar artistes" per veure dades.</p>
       <div class="row">
         <button id="load-btn" type="button" class="btn-small">Carregar artistes</button>
       </div>
-      <p id="artist-output">Prem "Carregar artistes" per veure dades.</p>
     </section>
+
+    <!-- Section per eliminar un artista -->
+    <section class="card">
+      <h2>3) Deletar artista</h2>
+      <form id="artist-form-del">
+        <div>
+          <label for="artist-name-del">Nom de l'artista</label>
+          <input id="artist-name-del" name="name" required />
+        </div>
+        <div>
+          <button type="submit">Delete</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Section per actualitzar un artista -->
+    <section class="card">
+      <h2>4) Actualitzar artista</h2>
+      <form id="artist-form-update">
+        <div>
+          <label for="artist-name-update">Nom de l'artista</label>
+          <input id="artist-name-update" name="name" required />
+        </div>
+        <div>
+          <label for="artist-name-nou">Nom de l'artista (actualitzat)</label>
+          <input id="artist-name-nou" name="name" required />
+        </div>
+        <div>
+          <label for="artist-nacionalitat-nova">Nacionalitat de l'artista (actualitzada)</label>
+          <input id="artist-nacionalitat-nova" name="name" required />
+        </div>
+        <div>
+          <button type="submit">Actualitzar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-------------------------------------------------------------------------------------------->
 
   </main>
 
