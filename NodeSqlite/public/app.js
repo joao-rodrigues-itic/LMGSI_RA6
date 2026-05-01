@@ -121,6 +121,8 @@ const albumOutput = document.getElementById("album-output");
 const formDelAlbum = document.getElementById("album-form-del");
 const albumNameDel = document.getElementById("album-name-del");
 
+const albumArtistsSelect = document.getElementById("album-artists");
+
 //Crear nou album
 formAlbumAdd.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -179,4 +181,55 @@ formDelAlbum.addEventListener("submit", async (event) => {
   albumOutput.textContent = message;
   if (res.ok) formDelAlbum.reset();
   
+});
+
+// Funcció per carregar artistes en select
+async function loadArtistsToSelect() {
+  const res = await fetch("/api/artists", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data: "artists" })
+  });
+  const json = await res.json();
+  
+  albumArtistsSelect.innerHTML = ""; // Limpa opções atuais
+  json.result.forEach(artist => {
+    const option = document.createElement("option");
+    option.value = artist.id;
+    option.textContent = artist.name;
+    albumArtistsSelect.appendChild(option);
+  });
+}
+
+// Carregar en iniciar
+loadArtistsToSelect();
+
+// Actualizar el event de submit de álbum
+formAlbumAdd.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const name = albumNameInput.value.trim();
+  const year = albumYearInput.value.trim();
+  
+  // Captura els IDs dels artistes selecionats en select multiple
+  const selectedArtists = Array.from(albumArtistsSelect.selectedOptions).map(opt => opt.value);
+
+  if (!name || !year) return;
+
+  const res = await fetch("/api/AddAlbum", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ 
+      name, 
+      year, 
+      artistIds: selectedArtists // Enviar els IDs per al backend
+    })
+  });
+
+  const message = await res.text();
+  albumOutput.textContent = message;
+  if (res.ok) {
+    formAlbumAdd.reset();
+    loadArtistsToSelect(); // Recarrega per garantitzar la sincronia
+  }
 });

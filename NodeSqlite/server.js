@@ -173,14 +173,34 @@ app.listen(PORT, () => {
 
 // Adicionar album POST
 app.post("/api/AddAlbum",  (req, res) => {
-  const name = req.body.name;
-  const year = req.body.year;
-  db.run("INSERT INTO albumes (name, any) VALUES (?, ?)", [name, year], (error) => {
+  const { name, year, artistIds } = req.body;  
+
+  db.run("INSERT INTO albumes (name, any) VALUES (?, ?)", [name, year], function(error) {
     if (error) {
       res.status(500).type("text").send(`Error: ${error.message}`);
       return;
     }
-    res.status(201).type("text").send(`Album creat: ${name}`);
+
+    const albumId = this.lastID; // Obtener l'ID del álbum
+
+    // Si hi ha artistes, insertar a la taula de relació
+    if (artistIds && artistIds.length > 0) {
+      const placeholders = artistIds.map(() => "(?, ?)").join(",");
+      const values = [];
+      artistIds.forEach(artistId => {
+        values.push(artistId, albumId);
+      });
+
+      db.run(`INSERT INTO artists_albumes (id_artista, id_album) VALUES ${placeholders}`, values, (err) => {
+        if (err) {
+          return res.status(500).send(`Error en associar artistes: ${err.message}`);
+        }
+        res.status(201).send(`Álbum '${name}' creat i associat a artistes.`);
+      });
+    } else {
+      res.status(201).send(`Álbum '${name}' criat sense artistes associats.`);
+    }
+
   });
 });
 
