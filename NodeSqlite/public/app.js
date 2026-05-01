@@ -13,6 +13,7 @@ const actualitzaArtist = document.getElementById("artist-name-update");
 const nouNom = document.getElementById("artist-name-nou");
 const novaNacionalitat = document.getElementById("artist-nacionalitat-nova")
 
+//Crear nou artista
 form.addEventListener("submit", async (event) => {
   event.preventDefault();//per defecte recarregaria la pagina així que evitem això.
 
@@ -36,8 +37,7 @@ form.addEventListener("submit", async (event) => {
 //Consultar els artistes
 loadButton.addEventListener("click", async () => {
 
-  let  text = "text a enviar en aquest cas la taula";
-  text = "artists";
+  let  text = "artists";
   // Fem una petició HTTP al servidor (Express)
   // fetch() envia una request al backend
   const res = await fetch("/api/artists", {
@@ -107,5 +107,76 @@ formUpdate.addEventListener("submit", async (event) => {
   const message = await res.text();
   artistOutput.textContent = message;
   if (res.ok) formUpdate.reset();
+  
+});
+
+//--------------------------------------------------------------------------------------
+const formAlbumAdd = document.getElementById("album-form-create");
+const albumNameInput = document.getElementById("album-name");
+const albumYearInput = document.getElementById("album-year");
+
+const loadAlbumButton = document.getElementById("get-albuns");
+const albumOutput = document.getElementById("album-output");
+
+const formDelAlbum = document.getElementById("album-form-del");
+const albumNameDel = document.getElementById("album-name-del");
+
+//Crear nou album
+formAlbumAdd.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const name = albumNameInput.value.trim();
+  const year = albumYearInput.value.trim();
+  if (!name || !year) return;
+
+  const res = await fetch("/api/AddAlbum", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, year })
+  });
+
+  const message = await res.text();
+  albumOutput.textContent = message;
+  if (res.ok) formAlbumAdd.reset();
+});
+
+//Consultar els albums
+loadAlbumButton.addEventListener("click", async () => {
+
+  let text = "albumes";
+  const res = await fetch("/api/albumes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({ data: text })
+  });
+
+  const json = await res.json();
+  albumOutput.textContent = JSON.stringify(json.result, null, 2);
+
+});
+
+// Deletar album
+formDelAlbum.addEventListener("submit", async (event) => {
+  event.preventDefault();//per defecte recarregaria la pagina així que evitem això.
+
+  const name = albumNameDel.value.trim();
+  if (!name) return;
+
+  const res = await fetch("/api/DelAlbum", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ data: name })
+  });
+
+  const message = await res.text();
+  albumOutput.textContent = message;
+  if (res.ok) formDelAlbum.reset();
   
 });

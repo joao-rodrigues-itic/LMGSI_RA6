@@ -39,9 +39,7 @@ db.serialize(() => {
     CREATE TABLE IF NOT EXISTS albumes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      any INTEGER NOT NULL,
-      id_artista INTEGER,
-      CONSTRAINT FK_ID_ARTISTA FOREIGN KEY (id_artista) REFERENCES artists_albumes(id_artista)
+      any INTEGER NOT NULL
     )
   `);
 
@@ -169,4 +167,44 @@ app.put("/api/UpdateArtist",  (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor a http://localhost:${PORT}`);
   console.log(`Base de dades SQLite: ${dbPath}`);
+});
+
+//------------------------------------------------------------------------------
+
+// Adicionar album POST
+app.post("/api/AddAlbum",  (req, res) => {
+  const name = req.body.name;
+  const year = req.body.year;
+  db.run("INSERT INTO albumes (name, any) VALUES (?, ?)", [name, year], (error) => {
+    if (error) {
+      res.status(500).type("text").send(`Error: ${error.message}`);
+      return;
+    }
+    res.status(201).type("text").send(`Album creat: ${name}`);
+  });
+});
+
+// Consultar artistes GET
+app.post("/api/albumes",  (req, res) => {
+  const table = req.body.data;
+  db.all(`SELECT * FROM ${table} ORDER BY id`, (err, rows) => {
+
+    if (err){
+      return res.status(500).json({ error: err.message });
+    }
+    console.log(rows);
+    res.json({ result: rows });
+  });
+});
+
+// Deletar album DELETE
+app.delete("/api/DelAlbum",  (req, res) => {
+  const name = req.body.data;
+  db.run("DELETE FROM albumes WHERE (name) = (?)", [name], (error) => {
+    if (error) {
+      res.status(500).type("text").send(`Error: ${error.message}`);
+      return;
+    }
+    res.status(201).type("text").send(`Album eliminat: ${name}`);
+  });
 });

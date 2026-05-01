@@ -14,6 +14,7 @@
       <p>Si la base de dades està buida, es creen dos artistes inicials.</p>
     </section>
 
+    <!-- Section per afegir un artista -->
     <section class="card">
       <h2>1) Afegir artista</h2>
       <form id="artist-form">
@@ -31,6 +32,7 @@
       </form>
     </section>
 
+    <!-- Section per consultar artistes -->
     <section class="card">
       <h2>2) Consultar artistes</h2>
       <p id="artist-output">Prem "Carregar artistes" per veure dades.</p>
@@ -76,6 +78,47 @@
     </section>
 
     <!-------------------------------------------------------------------------------------------->
+
+    <!-- Section per afegir un album -->
+    <section class="card">
+      <h2>1) Afegir album</h2>
+      <form id="album-form-create">
+        <div>
+          <label for="album-name">Nom de l'album</label>
+          <input id="album-name" name="name" required />
+        </div>
+        <div>
+          <label for="album-year">Any de l'album</label>
+          <input id="album-year" type="number" required/>
+        </div>
+        <div>
+          <button type="submit">Desar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Section per consultar albumes -->
+    <section class="card">
+      <h2>2) Consultar àlbumes</h2>
+      <p id="album-output">Prem "Carregar àlbumes" per veure dades.</p>
+      <div class="row">
+        <button id="get-albuns" type="button" class="btn-small">Carregar àlbumes</button>
+      </div>
+    </section>
+
+    <!-- Section per eliminar un album -->
+    <section class="card">
+      <h2>3) Deletar album</h2>
+      <form id="album-form-del">
+        <div>
+          <label for="album-name-del">Nom de l'artista</label>
+          <input id="album-name-del" name="name" required />
+        </div>
+        <div>
+          <button type="submit">Delete</button>
+        </div>
+      </form>
+    </section>
 
   </main>
 
