@@ -74,6 +74,17 @@ db.serialize(() => {
     )
   `);
 
+  //Creació de la taula artists_cancons
+  db.run(`
+    CREATE TABLE IF NOT EXISTS artists_cancons (
+      id_artista INTEGER,
+      id_canco INTEGER,
+      PRIMARY KEY (id_artista, id_canco),
+      CONSTRAINT FK_ID_ARTISTES FOREIGN KEY (id_artista) REFERENCES artists(id),
+      CONSTRAINT FK_ID_CANCONS FOREIGN KEY (id_canco) REFERENCES canco(id)
+    )
+  `);
+
   db.get("SELECT id FROM artists WHERE name = ?", ["Txarango"], (error, row) => {
     if (error) {
       console.log("Error comprovant dades inicials:", error.message);
@@ -226,5 +237,65 @@ app.delete("/api/DelAlbum",  (req, res) => {
       return;
     }
     res.status(201).type("text").send(`Album eliminat: ${name}`);
+  });
+});
+
+//------------------------------------------------------------------------------
+
+// Adicionar canco POST
+app.post("/api/AddCanco",  (req, res) => {
+  const { name, duration, artistIds, albumIds } = req.body;  
+
+  db.run("INSERT INTO canco (name, duracio) VALUES (?, ?)", [name, duration], function(error) {
+    if (error) {
+      res.status(500).type("text").send(`Error: ${error.message}`);
+      return;
+    }
+
+    const cancoId = this.lastID; // Obtener l'ID de la canço
+
+    // Relacionar amb artistes
+    if (artistIds && artistIds.length > 0) {
+      const artistPlaceholders = artistIds.map(() => "(?, ?)").join(",");
+      const artistValues = [];
+      artistIds.forEach(id => artistValues.push(id, cancoId));
+      db.run(`INSERT INTO artists_cancons (id_artista, id_canco) VALUES ${artistPlaceholders}`, artistValues);
+    }
+
+    // Relacionar amb albumes
+    if (albumIds && albumIds.length > 0) {
+      const albumPlaceholders = albumIds.map(() => "(?, ?)").join(",");
+      const albumValues = [];
+      albumIds.forEach(id => albumValues.push(id, cancoId));
+      db.run(`INSERT INTO albumes_cancons (id_album, id_canco) VALUES ${albumPlaceholders}`, albumValues);
+    }
+    
+    res.status(201).send(`Canço '${name}' desada!`);
+
+  });
+});
+
+// Consultar cançons GET
+app.post("/api/cancons",  (req, res) => {
+  const table = req.body.data;
+  db.all(`SELECT * FROM ${table} ORDER BY id`, (err, rows) => {
+
+    if (err){
+      return res.status(500).json({ error: err.message });
+    }
+    console.log(rows);
+    res.json({ result: rows });
+  });
+});
+
+// Deletar album DELETE
+app.delete("/api/DelCanco",  (req, res) => {
+  const name = req.body.data;
+  db.run("DELETE FROM canco WHERE (name) = (?)", [name], (error) => {
+    if (error) {
+      res.status(500).type("text").send(`Error: ${error.message}`);
+      return;
+    }
+    res.status(201).type("text").send(`Canco eliminada: ${name}`);
   });
 });

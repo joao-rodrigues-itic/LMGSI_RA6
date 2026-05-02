@@ -125,6 +125,58 @@
       </form>
     </section>
 
+    <!-------------------------------------------------------------------------------------------->
+
+        <!-- Section per afegir una canço -->
+        <section class="card">
+        <h2>1) Afegir canço</h2>
+        <form id="canco-form-create">
+            <div>
+            <label for="canco-name">Nom de la canço</label>
+            <input id="canco-name" name="name" required />
+            </div>
+            <div>
+            <label for="canco-duration">Duració de la canció</label>
+            <input id="canco-duration" type="time" required/>
+            </div>
+            
+            <div>
+            <label for="artists_cancons">Seleccionar Artistes (Ctrl + click per molts)</label>
+            <select id="artists_cancons" multiple style="width: 100%; height: 100px;"></select>
+            </div>
+            <div>
+            <label for="albumes_cancons">Seleccionar Albumes (Ctrl + click per molts)</label>
+            <select id="albumes_cancons" multiple style="width: 100%; height: 100px;"></select>
+            </div>
+            <div>
+            <button type="submit">Desar</button>
+            </div>
+        </form>
+        </section>
+
+        <!-- Section per consultar cançons -->
+        <section class="card">
+        <h2>2) Consultar cançons</h2>
+        <p id="canco-output">Prem "Carregar cançons" per veure dades.</p>
+        <div class="row">
+            <button id="get-cancons" type="button" class="btn-small">Carregar cançons</button>
+        </div>
+        </section>
+
+        <!-- Section per eliminar una canco -->
+        <section class="card">
+        <h2>3) Deletar canço</h2>
+        <form id="canco-form-del">
+            <div>
+            <label for="canco-name-del">Nom de la canço</label>
+            <input id="canco-name-del" name="name" required />
+            </div>
+            <div>
+            <button type="submit">Delete</button>
+            </div>
+        </form>
+        </section>
+
   </main>
 
   <script src="app.js"></script>

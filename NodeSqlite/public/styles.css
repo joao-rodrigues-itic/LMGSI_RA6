@@ -111,7 +111,7 @@ button:hover {
   color: var(--danger);
 }
 
-#artist-output, #album-output {
+#artist-output, #album-output, #canco-output {
   margin-top: 12px;
   padding: 10px;
   border-radius: 8px;
