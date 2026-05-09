@@ -38,28 +38,11 @@ form.addEventListener("submit", async (event) => {
 loadButton.addEventListener("click", async () => {
 
   let  text = "artists";
-  // Fem una petició HTTP al servidor (Express)
-  // fetch() envia una request al backend
-  const res = await fetch("/api/artists", {
-    // Tipus de petició
-    // POST = enviem dades al servidor
-    method: "POST",
-    // Capçaleres HTTP
-    // Indiquem que estem enviant dades en format JSON
-    headers: {
-      "Content-Type": "application/json"
-    },
-
-    // Cos de la petició (les dades que enviem)
-    // Convertim l’objecte JS a text JSON
-    body: JSON.stringify({ data: text })
+  const res = await fetch(`/api/artists?data=${text}`, {
   });
 
-  // El servidor respon amb JSON
   const json = await res.json();
-  // Mostrem el resultat a la textarea de sortida
   artistOutput.textContent = JSON.stringify(json.result, null, 2);
-
 });
 
 // Deletar artista
@@ -178,13 +161,7 @@ formAlbumAdd.addEventListener("submit", async (event) => {
 loadAlbumButton.addEventListener("click", async () => {
 
   let text = "albumes";
-  const res = await fetch("/api/albumes", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-
-    body: JSON.stringify({ data: text })
+  const res = await fetch(`/api/albumes?data=${text}`, {
   });
 
   const json = await res.json();
@@ -282,6 +259,7 @@ formCancoAdd.addEventListener("submit", async (e) => {
     body: JSON.stringify({ 
       name, 
       duration, 
+
       artistIds: selectedArtists, 
       albumIds: selectedAlbums 
     })
@@ -298,13 +276,7 @@ if (formCancoAdd) loadDataForSongs();
 loadCanconsButton.addEventListener("click", async () => {
 
   let text = "canco";
-  const res = await fetch("/api/cancons", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-
-    body: JSON.stringify({ data: text })
+  const res = await fetch(`/api/cancons?data=${text}`, {
   });
 
   const json = await res.json();
@@ -312,7 +284,7 @@ loadCanconsButton.addEventListener("click", async () => {
 
 });
 
-// Deletar album
+// Deletar canço
 formDelCanco.addEventListener("submit", async (event) => {
   event.preventDefault();
 

@@ -126,8 +126,9 @@ app.post("/api/AddArtist",  (req, res) => {
 });
 
 // Consultar artistes GET
-app.post("/api/artists",  (req, res) => {
-  const table = req.body.data;
+app.get("/api/artists",  (req, res) => {
+  const table = req.query.data;
+
   db.all(`SELECT * FROM ${table} ORDER BY id`, (err, rows) => {
 
     if (err){
@@ -216,8 +217,8 @@ app.post("/api/AddAlbum",  (req, res) => {
 });
 
 // Consultar artistes GET
-app.post("/api/albumes",  (req, res) => {
-  const table = req.body.data;
+app.get("/api/albumes",  (req, res) => {
+  const table = req.query.data;
   db.all(`SELECT * FROM ${table} ORDER BY id`, (err, rows) => {
 
     if (err){
@@ -276,8 +277,8 @@ app.post("/api/AddCanco",  (req, res) => {
 });
 
 // Consultar cançons GET
-app.post("/api/cancons",  (req, res) => {
-  const table = req.body.data;
+app.get("/api/cancons",  (req, res) => {
+  const table = req.query.data;
   db.all(`SELECT * FROM ${table} ORDER BY id`, (err, rows) => {
 
     if (err){
